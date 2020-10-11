@@ -1,6 +1,10 @@
 package ru.raralux.itunesfs.service.model
 
-data class AlbumModel (
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class AlbumModel(
     var wrapperType: String? = null,
     var collectionType: String? = null,
     var artistId: Int? = null,
@@ -12,7 +16,7 @@ data class AlbumModel (
     var collectionViewUrl: String? = null,
     var artworkUrl60: String? = null,
     var artworkUrl100: String? = null,
-    var collectionPrice: Int? = null,
+    var collectionPrice: Float? = null,
     var collectionExplicitness: String? = null,
     var contentAdvisoryRating: String? = null,
     var trackCount: Int? = null,
@@ -21,4 +25,4 @@ data class AlbumModel (
     var currency: String? = null,
     var releaseDate: String? = null,
     var primaryGenreName: String? = null
-)
+) : Parcelable

@@ -9,8 +9,8 @@ import ru.raralux.itunesfs.service.model.ResultSongModel
 interface ITunesServices {
 
     @GET("/search")
-    fun getAlbums(@QueryMap options: Map<String?, String?>?): Response<ResultAlbumModel?>
+    suspend fun getAlbums(@QueryMap options: Map<String?, String?>?): Response<ResultAlbumModel?>
 
     @GET("/lookup")
-    fun getTrack(@QueryMap options: Map<String?, String?>?): Response<ResultSongModel?>
+    suspend fun getTrack(@QueryMap options: Map<String?, String?>?): Response<ResultSongModel?>
 }

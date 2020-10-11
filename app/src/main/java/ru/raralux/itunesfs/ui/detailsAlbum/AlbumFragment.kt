@@ -5,28 +5,46 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import ru.raralux.itunesfs.R
+import ru.raralux.itunesfs.service.Status
+import ru.raralux.itunesfs.service.model.AlbumModel
+import ru.raralux.itunesfs.service.model.TrackModel
+import ru.raralux.itunesfs.ui.listAlbums.ListAlbumAdapter
+import ru.raralux.itunesfs.ui.listAlbums.ListAlbumsViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AlbumFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AlbumFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    companion object {
+        const val ALBUM = "ALBUM"
+        fun newInstance() = AlbumFragment()
+    }
+
+    private lateinit var viewModel: AlbumViewModel
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: TrackAdapter
+
+    private var albumModel: AlbumModel? = null
+    private var trackList: MutableList<TrackModel>? = null
+
+    //view
+    private lateinit var backBtn :Button
+    private lateinit var image :ImageView
+    private lateinit var albumName :TextView
+    private lateinit var artisteName :TextView
+    private lateinit var genre :TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            albumModel = it.getParcelable<AlbumModel?>(ALBUM)
         }
     }
 
@@ -38,23 +56,49 @@ class AlbumFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_album, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AlbumFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AlbumFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        findViews(view)
+        bind()
+    }
+
+    private fun findViews(view: View) {
+        recyclerView = view.findViewById(R.id.album_rv)
+        backBtn = view.findViewById(R.id.album_back_btn)
+        image = view.findViewById(R.id.album_iv)
+        albumName = view.findViewById(R.id.album_album_name_tv)
+        artisteName = view.findViewById(R.id.album_artist_name_tv)
+        genre = view.findViewById(R.id.album_genre_date_tv)
+    }
+
+    private fun bind() {
+        adapter = TrackAdapter(trackList)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.adapter = adapter
+
+        backBtn.setOnClickListener {
+            parentFragmentManager
+                .popBackStack()
+        }
+
+        albumName.text = albumModel?.collectionName?:"N/A"
+        artisteName.text = albumModel?.artistName?:"N/A"
+        genre.text = albumModel?.primaryGenreName?:"N/A"
+        Picasso.get().load(albumModel?.artworkUrl100).into(image)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(AlbumViewModel::class.java)
+
+        viewModel.getTracks(albumModel?.collectionId.toString())
+        viewModel.tracksLiveData.observe(viewLifecycleOwner, Observer { response ->
+            when (response.status) {
+                Status.SUCCESS -> {
+                    adapter.submitTrackList(response.data?.results)
                 }
             }
+        })
+
+
     }
 }
