@@ -1,4 +1,4 @@
-package ru.raralux.itunesfs.service.model
+package ru.raralux.itunesfs.model
 
 data class TrackModel(
     var wrapperType: String? = null,

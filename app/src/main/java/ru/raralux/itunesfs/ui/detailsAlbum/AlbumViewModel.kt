@@ -9,13 +9,13 @@ import kotlinx.coroutines.launch
 import ru.raralux.itunesfs.service.Event
 import ru.raralux.itunesfs.service.ITunesServices
 import ru.raralux.itunesfs.service.RetrofitClient
-import ru.raralux.itunesfs.service.model.ResultSongModel
+import ru.raralux.itunesfs.model.TrackModel
 
 class AlbumViewModel(application: Application) :AndroidViewModel(application) {
     private val TAG = "RESPONSE"
     private val api: ITunesServices = RetrofitClient.getClient()
 
-    val tracksLiveData :MutableLiveData<Event<ResultSongModel>> = MutableLiveData()
+    val tracksLiveData :MutableLiveData<Event<MutableList<TrackModel>>> = MutableLiveData()
 
     fun getTracks(collectionId: String) {
         viewModelScope.launch {
@@ -30,9 +30,11 @@ class AlbumViewModel(application: Application) :AndroidViewModel(application) {
         val response = api.getTrack(data)
 
         if (response.isSuccessful) {
-            val resultResponse = response.body()
-            val event = Event.success(resultResponse)
-            tracksLiveData.postValue(event)
+            response.body()?.results?.let { resultResponse ->
+                resultResponse.removeAt(0) // Первый объект - информация про альбом
+                val event = Event.success(resultResponse)
+                tracksLiveData.postValue(event)
+            }
         } else {
             Log.d(TAG, "response is not successful: ${response.message()}")
         }

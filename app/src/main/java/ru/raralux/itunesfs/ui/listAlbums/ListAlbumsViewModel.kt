@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import ru.raralux.itunesfs.service.Event
 import ru.raralux.itunesfs.service.ITunesServices
 import ru.raralux.itunesfs.service.RetrofitClient
-import ru.raralux.itunesfs.service.model.ResultAlbumModel
+import ru.raralux.itunesfs.service.response.ResultAlbumModel
 
 class ListAlbumsViewModel(application: Application) : AndroidViewModel(application) {
     private val TAG = "RESPONSE"
@@ -31,9 +31,11 @@ class ListAlbumsViewModel(application: Application) : AndroidViewModel(applicati
         val response = api.getAlbums(data)
 
         if (response.isSuccessful) {
-            val resultResponse = response.body()
-            val event = Event.success(resultResponse)
-            albumsLiveData.postValue(event)
+            if (response.body()?.resultCount == 0) {
+                albumsLiveData.postValue(Event.empty(response.body()))
+            } else {
+                albumsLiveData.postValue(Event.success(response.body()))
+            }
         } else {
 //            val event = Event.error(response.message())
 //            albumsLiveData.postValue(event)

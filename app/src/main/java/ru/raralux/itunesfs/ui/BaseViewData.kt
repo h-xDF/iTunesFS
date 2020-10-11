@@ -1,15 +1,8 @@
 package ru.raralux.itunesfs.ui
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Response
-import ru.raralux.itunesfs.service.Event
 import ru.raralux.itunesfs.service.ITunesServices
 import ru.raralux.itunesfs.service.RetrofitClient
-import ru.raralux.itunesfs.service.model.ResultAlbumModel
 
 abstract class BaseViewData: ViewModel() {
 

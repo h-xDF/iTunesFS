@@ -4,21 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.EditText
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.launch
 import ru.raralux.itunesfs.R
-import ru.raralux.itunesfs.service.Event
 import ru.raralux.itunesfs.service.Status
-import ru.raralux.itunesfs.service.model.AlbumModel
-import ru.raralux.itunesfs.ui.detailsAlbum.AlbumFragment
+import ru.raralux.itunesfs.model.AlbumModel
 
 class ListAlbumsFragment : Fragment() {
 
@@ -35,6 +29,8 @@ class ListAlbumsFragment : Fragment() {
     // view
     private lateinit var searchBtn: Button
     private lateinit var searchString: EditText
+    private lateinit var infoText: TextView
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +50,19 @@ class ListAlbumsFragment : Fragment() {
             viewModel.albumsLiveData.observe(viewLifecycleOwner, Observer {response ->
                 when (response.status) {
                     Status.SUCCESS -> {
+                        infoText.visibility = View.GONE
+                        progressBar.visibility = View.GONE
                         adapter.submitAlbumList(response.data?.results)
+                    }
+                    Status.EMPTY_DATA -> {
+                        progressBar.visibility = View.GONE
+                        adapter.submitAlbumList(response.data?.results)
+                        infoText.text = "Nothing found..."
+                        infoText.visibility = View.VISIBLE
+                    }
+                    Status.LOADING -> {
+                        infoText.visibility = View.GONE
+                        progressBar.visibility = View.VISIBLE
                     }
                 }
             })
@@ -70,6 +78,8 @@ class ListAlbumsFragment : Fragment() {
         searchString = view.findViewById(R.id.search_et)
         recyclerView = view.findViewById(R.id.albums_rv)
         searchBtn = view.findViewById(R.id.search_btn)
+        infoText = view.findViewById(R.id.la_info_tv)
+        progressBar = view.findViewById(R.id.la_progress_bar)
     }
 
     private fun bind() {

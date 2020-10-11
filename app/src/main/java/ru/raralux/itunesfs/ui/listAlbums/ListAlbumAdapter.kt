@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.album_item.view.*
 import ru.raralux.itunesfs.R
-import ru.raralux.itunesfs.service.model.AlbumModel
+import ru.raralux.itunesfs.model.AlbumModel
 import ru.raralux.itunesfs.ui.detailsAlbum.AlbumFragment
 
 class ListAlbumAdapter(private var albumList: MutableList<AlbumModel>?,
-private val fragment: Fragment)
+                       private val fragment: Fragment)
     : RecyclerView.Adapter<ListAlbumAdapter.ListAlbumHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAlbumHolder {

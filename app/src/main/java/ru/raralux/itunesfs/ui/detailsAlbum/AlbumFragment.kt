@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,10 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import ru.raralux.itunesfs.R
 import ru.raralux.itunesfs.service.Status
-import ru.raralux.itunesfs.service.model.AlbumModel
-import ru.raralux.itunesfs.service.model.TrackModel
-import ru.raralux.itunesfs.ui.listAlbums.ListAlbumAdapter
-import ru.raralux.itunesfs.ui.listAlbums.ListAlbumsViewModel
+import ru.raralux.itunesfs.model.AlbumModel
+import ru.raralux.itunesfs.model.TrackModel
 
 class AlbumFragment : Fragment() {
     companion object {
@@ -39,6 +38,7 @@ class AlbumFragment : Fragment() {
     private lateinit var albumName :TextView
     private lateinit var artisteName :TextView
     private lateinit var genre :TextView
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +68,7 @@ class AlbumFragment : Fragment() {
         albumName = view.findViewById(R.id.album_album_name_tv)
         artisteName = view.findViewById(R.id.album_artist_name_tv)
         genre = view.findViewById(R.id.album_genre_date_tv)
+        progressBar = view.findViewById(R.id.album_progress_bar)
     }
 
     private fun bind() {
@@ -82,8 +83,10 @@ class AlbumFragment : Fragment() {
 
         albumName.text = albumModel?.collectionName?:"N/A"
         artisteName.text = albumModel?.artistName?:"N/A"
-        genre.text = albumModel?.primaryGenreName?:"N/A"
-        Picasso.get().load(albumModel?.artworkUrl100).into(image)
+        genre.text = mergeGenreYear(albumModel)
+        Picasso.get()
+            .load(albumModel?.artworkUrl100)
+            .into(image)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -94,11 +97,21 @@ class AlbumFragment : Fragment() {
         viewModel.tracksLiveData.observe(viewLifecycleOwner, Observer { response ->
             when (response.status) {
                 Status.SUCCESS -> {
-                    adapter.submitTrackList(response.data?.results)
+                    progressBar.visibility = View.GONE
+                    adapter.submitTrackList(response.data)
+                }
+                Status.LOADING -> {
+                    progressBar.visibility = View.VISIBLE
                 }
             }
         })
+    }
 
-
+    private fun mergeGenreYear(album : AlbumModel?): String {
+        var year: String? = null
+        if (album?.releaseDate != null) {
+            year = album.releaseDate!!.split('-').first()
+        }
+        return "${album?.primaryGenreName?.toUpperCase()} · $year"
     }
 }

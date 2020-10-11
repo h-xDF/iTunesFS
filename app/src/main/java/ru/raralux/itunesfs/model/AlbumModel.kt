@@ -1,4 +1,4 @@
-package ru.raralux.itunesfs.service.model
+package ru.raralux.itunesfs.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
