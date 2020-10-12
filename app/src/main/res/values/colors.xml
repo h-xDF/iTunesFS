@@ -10,4 +10,5 @@
     <color name="colorTexBlack">#F2000000</color>
 
     <color name="colorTexWhite">#FFFFFF</color>
+    <color name="limpid">#00FFFFFF</color>
 </resources>
