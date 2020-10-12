@@ -8,7 +8,6 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.raralux.itunesfs.R
@@ -40,39 +39,39 @@ class ListAlbumsFragment : Fragment() {
         return inflater.inflate(R.layout.list_albums_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        findViews(view)
+        bind()
+
         searchBtn = view!!.findViewById(R.id.search_btn)
         viewModel = ViewModelProvider(this).get(ListAlbumsViewModel::class.java)
+
+        viewModel.albumsLiveData.observe(viewLifecycleOwner, Observer {response ->
+            when (response.status) {
+                Status.SUCCESS -> {
+                    infoText.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                    adapter.submitAlbumList(response.data?.results)
+                }
+                Status.EMPTY_DATA -> {
+                    progressBar.visibility = View.GONE
+                    adapter.submitAlbumList(response.data?.results)
+                    infoText.text = "Nothing found..."
+                    infoText.visibility = View.VISIBLE
+                }
+                Status.LOADING -> {
+                    infoText.visibility = View.GONE
+                    progressBar.visibility = View.VISIBLE
+                }
+            }
+        })
 
         searchBtn.setOnClickListener {
             val search = searchString.text.toString()
             viewModel.getAlbum(search)
-            viewModel.albumsLiveData.observe(viewLifecycleOwner, Observer {response ->
-                when (response.status) {
-                    Status.SUCCESS -> {
-                        infoText.visibility = View.GONE
-                        progressBar.visibility = View.GONE
-                        adapter.submitAlbumList(response.data?.results)
-                    }
-                    Status.EMPTY_DATA -> {
-                        progressBar.visibility = View.GONE
-                        adapter.submitAlbumList(response.data?.results)
-                        infoText.text = "Nothing found..."
-                        infoText.visibility = View.VISIBLE
-                    }
-                    Status.LOADING -> {
-                        infoText.visibility = View.GONE
-                        progressBar.visibility = View.VISIBLE
-                    }
-                }
-            })
         }
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        findViews(view)
-        bind()
     }
 
     private fun findViews(view: View) {

@@ -11,10 +11,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val listAlbumFragment: Fragment = ListAlbumsFragment.newInstance()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.activity_main, listAlbumFragment)
-            .addToBackStack("LIST_ALBUM")
-            .commit()
+        if (savedInstanceState == null) {
+            val listAlbumFragment: Fragment = ListAlbumsFragment.newInstance()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.activity_main, listAlbumFragment)
+                .addToBackStack("LIST_ALBUM")
+                .commit()
+        }
     }
 }
