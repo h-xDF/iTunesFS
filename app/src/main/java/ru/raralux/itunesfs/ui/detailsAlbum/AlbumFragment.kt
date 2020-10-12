@@ -88,6 +88,8 @@ class AlbumFragment : Fragment() {
         Log.d(TAG, "image url: $picsUrl")
         Picasso.get()
             .load(picsUrl)
+            .placeholder(R.drawable.ic_placholder_image)
+            .error(R.drawable.ic_error_load_image)
             .into(image)
     }
 

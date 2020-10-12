@@ -59,7 +59,11 @@ class ListAlbumAdapter(
         val artistNameDate: TextView? = itemView?.ai_artist_name_date_tv
 
         fun bind(album: AlbumModel?) {
-            Picasso.get().load(album?.artworkUrl100).into(image)
+            Picasso.get()
+                .load(album?.artworkUrl100)
+                .placeholder(R.drawable.ic_placholder_image)
+                .error(R.drawable.ic_error_load_image)
+                .into(image)
 
             albumName?.text = album?.collectionName
             artistNameDate?.text = mergeNameDate(album)
