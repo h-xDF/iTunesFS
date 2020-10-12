@@ -1,14 +1,12 @@
 package ru.raralux.itunesfs.ui.detailsAlbum
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +22,7 @@ class AlbumFragment : Fragment() {
         const val ALBUM = "ALBUM"
         fun newInstance() = AlbumFragment()
     }
+    private val TAG = "IMAGE"
 
     private lateinit var viewModel: AlbumViewModel
     private lateinit var recyclerView: RecyclerView
@@ -33,7 +32,7 @@ class AlbumFragment : Fragment() {
     private var trackList: MutableList<TrackModel>? = null
 
     //view
-    private lateinit var backBtn :Button
+    private lateinit var backBtn :ImageButton
     private lateinit var image :ImageView
     private lateinit var albumName :TextView
     private lateinit var artisteName :TextView
@@ -84,8 +83,11 @@ class AlbumFragment : Fragment() {
         albumName.text = albumModel?.collectionName?:"N/A"
         artisteName.text = albumModel?.artistName?:"N/A"
         genre.text = mergeGenreYear(albumModel)
+        val picsUrl = resizePictureUrl(200, 200, albumModel?.artworkUrl100)
+        Log.d(TAG, "original image url: ${albumModel?.artworkUrl100}")
+        Log.d(TAG, "image url: $picsUrl")
         Picasso.get()
-            .load(albumModel?.artworkUrl100)
+            .load(picsUrl)
             .into(image)
     }
 
@@ -113,5 +115,15 @@ class AlbumFragment : Fragment() {
             year = album.releaseDate!!.split('-').first()
         }
         return "${album?.primaryGenreName?.toUpperCase()} · $year"
+    }
+
+    private fun resizePictureUrl(height: Int, width: Int, originUrl: String?): String? {
+        val bufResString = StringBuffer()
+        val urlSplit = originUrl?.split('/')
+        val resizeRes = "${height}x${width}bb.${urlSplit?.last()?.split('.')?.last()}"
+        for (i in 0..(urlSplit?.size?.minus(2)!!)) {
+            bufResString.append(urlSplit[i]).append('/')
+        }
+        return bufResString.append(resizeRes).toString()
     }
 }

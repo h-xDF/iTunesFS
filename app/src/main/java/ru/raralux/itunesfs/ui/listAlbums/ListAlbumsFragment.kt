@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +43,7 @@ class ListAlbumsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         searchBtn = view!!.findViewById(R.id.search_btn)
-        viewModel = ViewModelProviders.of(this).get(ListAlbumsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ListAlbumsViewModel::class.java)
 
         searchBtn.setOnClickListener {
             val search = searchString.text.toString()
@@ -87,18 +88,5 @@ class ListAlbumsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
 
-
-//            .setOnClickListener(this)
-//        if (albumList.isEmpty()) com.example.itunesforasoft.ui.ListFragment.setSearchInfo(com.example.itunesforasoft.ui.ListFragment.InfoText.START) else com.example.itunesforasoft.ui.ListFragment.setSearchInfo(
-//            com.example.itunesforasoft.ui.ListFragment.InfoText.EMPTY
-//        )
     }
-//
-//    fun onAlbumClickListener(album: AlbumModel): Boolean {
-//        val fragment: Fragment = AlbumFragment.newInstance()
-//        this.parentFragmentManager.beginTransaction().replace(R.id.activity_main, fragment).commit()
-//        return true
-//    }
-
-
 }

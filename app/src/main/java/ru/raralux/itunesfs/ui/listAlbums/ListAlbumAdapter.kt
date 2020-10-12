@@ -14,8 +14,9 @@ import ru.raralux.itunesfs.R
 import ru.raralux.itunesfs.model.AlbumModel
 import ru.raralux.itunesfs.ui.detailsAlbum.AlbumFragment
 
-class ListAlbumAdapter(private var albumList: MutableList<AlbumModel>?,
-                       private val fragment: Fragment)
+class ListAlbumAdapter(
+    private var albumList: MutableList<AlbumModel>?,
+    private val fragment: Fragment)
     : RecyclerView.Adapter<ListAlbumAdapter.ListAlbumHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAlbumHolder {
@@ -48,22 +49,28 @@ class ListAlbumAdapter(private var albumList: MutableList<AlbumModel>?,
     }
 
     fun submitAlbumList(data: MutableList<AlbumModel>?) {
-        albumList = data
+        albumList = data?.sortedBy { it.collectionName }?.toMutableList() // альбомы долны быть отсортированны по алфавиту
         notifyDataSetChanged()
     }
 
     class ListAlbumHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
         val image: ImageView? = itemView?.ai_ava_iv
         val albumName: TextView? = itemView?.ai_album_name_tv
-        val artistName: TextView? = itemView?.ai_artist_name_tv
-        val genre: TextView? = itemView?.ai_genre_name_date_tv
+        val artistNameDate: TextView? = itemView?.ai_artist_name_date_tv
 
         fun bind(album: AlbumModel?) {
             Picasso.get().load(album?.artworkUrl100).into(image)
 
             albumName?.text = album?.collectionName
-            artistName?.text = album?.artistName
-            genre?.text = album?.primaryGenreName
+            artistNameDate?.text = mergeNameDate(album)
+        }
+
+        private fun mergeNameDate(album: AlbumModel?): String {
+            var year: String? = null
+            if (album?.releaseDate != null) {
+                year = album.releaseDate!!.split('-').first()
+            }
+            return "${album?.artistName} - $year"
         }
     }
 }

@@ -7,18 +7,39 @@
     android:layout_height="match_parent"
     tools:context=".ui.detailsAlbum.AlbumFragment">
 
-    <Button
+    <ImageButton
         android:id="@+id/album_back_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/back_btn"
+        android:backgroundTint="@color/colorTexWhite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/fa_bt"-->
+<!--        android:layout_width="@dimen/button_size_64"-->
+<!--        android:layout_height="@dimen/button_size_64"-->
+
+<!--        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"-->
+<!--        app:iconGravity="textEnd"-->
+<!--        app:icon="@drawable/back_button"-->
+<!--        app:backgroundTint="@color/colorWhite"-->
+<!--        app:iconTint="@color/colorBlack"-->
+<!--        app:iconSize="@dimen/button_size_64"-->
+
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        tools:ignore="MissingClass" />-->
 
     <ImageView
         android:id="@+id/album_iv"
         android:layout_width="0dp"
-        android:layout_height="128dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,6 +86,7 @@
         android:id="@+id/album_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/album_genre_date_tv" />
@@ -75,10 +97,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
+        android:indeterminateTint="@color/colorTextRed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35"/>
+        app:layout_constraintVertical_bias="0.5"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

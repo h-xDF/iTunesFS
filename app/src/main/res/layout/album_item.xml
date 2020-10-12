@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/ai_ava_iv"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:layout_margin="4dp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
@@ -26,41 +26,31 @@
             android:id="@+id/ai_album_name_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textColor="@color/colorTexBlack"
             android:gravity="start"
-            android:padding="8dp"
-            android:textSize="24sp"
+            android:paddingHorizontal="8dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/ai_ava_iv"
             card_view:layout_constraintEnd_toEndOf="parent"
-            tools:text="Album name" />
+            tools:text="Album name"/>
 
         <TextView
-            android:id="@+id/ai_artist_name_tv"
+            android:id="@+id/ai_artist_name_date_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorTextRed"
+            android:paddingHorizontal="8dp"
             android:textSize="16sp"
-            android:padding="8dp"
             android:lines="1"
+            android:ellipsize="end"
             android:gravity="start"
             app:layout_constraintTop_toBottomOf="@id/ai_album_name_tv"
             app:layout_constraintStart_toEndOf="@id/ai_ava_iv"
             card_view:layout_constraintEnd_toEndOf="parent"
-            tools:text="Artist name" />
-
-        <TextView
-            android:id="@+id/ai_genre_name_date_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="12sp"
-            android:lines="1"
-            android:gravity="start"
-            app:layout_constraintTop_toBottomOf="@id/ai_artist_name_tv"
-            app:layout_constraintStart_toEndOf="@id/ai_ava_iv"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            tools:text="ALTERNATIVE RAP - 2019"/>
+            tools:text="Anacondaz - 2019"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
