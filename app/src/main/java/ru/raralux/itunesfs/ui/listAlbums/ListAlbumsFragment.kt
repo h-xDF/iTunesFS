@@ -57,12 +57,17 @@ class ListAlbumsFragment : Fragment() {
                 Status.EMPTY_DATA -> {
                     progressBar.visibility = View.GONE
                     adapter.submitAlbumList(response.data?.results)
-                    infoText.text = "Nothing found..."
+                    infoText.text = getString(R.string.nothing_found)
                     infoText.visibility = View.VISIBLE
                 }
                 Status.LOADING -> {
                     infoText.visibility = View.GONE
                     progressBar.visibility = View.VISIBLE
+                }
+                Status.ERROR -> {
+                    progressBar.visibility = View.GONE
+                    infoText.text = response.error
+                    infoText.visibility = View.VISIBLE
                 }
             }
         })

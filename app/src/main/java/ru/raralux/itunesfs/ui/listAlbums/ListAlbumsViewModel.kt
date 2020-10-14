@@ -10,6 +10,8 @@ import ru.raralux.itunesfs.service.Event
 import ru.raralux.itunesfs.service.ITunesServices
 import ru.raralux.itunesfs.service.RetrofitClient
 import ru.raralux.itunesfs.service.response.ResultAlbumModel
+import ru.raralux.itunesfs.utils.ErrorUtils
+import java.lang.Error
 
 class ListAlbumsViewModel(application: Application) : AndroidViewModel(application) {
     private val TAG = "RESPONSE"
@@ -37,28 +39,9 @@ class ListAlbumsViewModel(application: Application) : AndroidViewModel(applicati
                 albumsLiveData.postValue(Event.success(response.body()))
             }
         } else {
-//            val event = Event.error(response.message())
-//            albumsLiveData.postValue(event)
-            Log.d(TAG, "response is not successful: ${response.message()}")
+            val error = ErrorUtils().parseError(response.errorBody())
+            albumsLiveData.postValue(Event.error(error?.errorMessage))
+            Log.e(TAG, "error code: ${response.code()}; error message: ${error?.errorMessage}")
         }
     }
-
-
-//    suspend fun getAlbums(searchString: String): LiveData<Response<ResultAlbumModel>> {
-//        this.viewModelScope.launch(Dispatchers.IO) {
-//            val data = mapOf<String?, String?>("entity" to "album", "term" to searchString)
-//            val response = api.getAlbums(data)
-//
-//            withContext(Dispatchers.Main) {
-//
-//            }
-//        }
-
-//        val result = withContext(Dispatchers.IO) {
-//            val data = mapOf<String?, String?>("entity" to "album", "term" to searchString)
-//            api.getAlbums(data)
-//        }
-//        emit
-
-//    }
 }

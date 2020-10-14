@@ -1,6 +1,6 @@
 package ru.raralux.itunesfs.service
 
-data class Event<out T>(val status: Status, val data: T?, val error: T?) {
+data class Event<out T>(val status: Status, val data: T?, val error: String?) {
     companion object {
         fun <T> loading(): Event<T> {
             return Event(Status.LOADING, null, null)
@@ -14,7 +14,7 @@ data class Event<out T>(val status: Status, val data: T?, val error: T?) {
             return Event(Status.EMPTY_DATA, data, null)
         }
 
-        fun <T> error(error: T?): Event<T> {
+        fun <T> error(error: String?): Event<T> {
             return Event(Status.ERROR, null, error)
         }
     }

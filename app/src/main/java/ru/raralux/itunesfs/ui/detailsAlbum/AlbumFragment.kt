@@ -37,6 +37,7 @@ class AlbumFragment : Fragment() {
     private lateinit var albumName :TextView
     private lateinit var artisteName :TextView
     private lateinit var genre :TextView
+    private lateinit var info :TextView
     private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +70,17 @@ class AlbumFragment : Fragment() {
                 Status.LOADING -> {
                     progressBar.visibility = View.VISIBLE
                 }
+                Status.ERROR -> {
+                    Log.d(TAG, "onViewCreated error mesage: ${response.error}")
+                    progressBar.visibility = View.GONE
+                    info.text = response.error
+                    info.visibility = View.VISIBLE
+                }
+                Status.EMPTY_DATA -> {
+                    progressBar.visibility = View.GONE
+                    info.text = getString(R.string.nothing_found)
+                    info.visibility = View.VISIBLE
+                }
             }
         })
     }
@@ -80,6 +92,7 @@ class AlbumFragment : Fragment() {
         albumName = view.findViewById(R.id.album_album_name_tv)
         artisteName = view.findViewById(R.id.album_artist_name_tv)
         genre = view.findViewById(R.id.album_genre_date_tv)
+        info = view.findViewById(R.id.album_info)
         progressBar = view.findViewById(R.id.album_progress_bar)
     }
 
