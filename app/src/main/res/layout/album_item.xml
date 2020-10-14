@@ -15,7 +15,7 @@
             android:id="@+id/ai_ava_iv"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_margin="4dp"
+            android:layout_margin="@dimen/dp_4"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
